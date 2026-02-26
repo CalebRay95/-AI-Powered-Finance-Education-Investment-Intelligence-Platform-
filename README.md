@@ -1,4 +1,4 @@
-# GIFT — AI-Powered Finance Education & Investment Intelligence Platform
+#  AI-Powered Finance Education & Investment Intelligence Platform
 
 > **CODENEXUS Hackathon** | Full-Stack Financial Ecosystem
 
