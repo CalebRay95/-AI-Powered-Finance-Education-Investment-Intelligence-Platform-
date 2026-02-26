@@ -1,0 +1,13 @@
+# Route modules are added here by subsequent phases.
+# Each file should export an Express Router.
+#
+# Expected files (one per feature module):
+#   authRoutes.js
+#   portfolioRoutes.js
+#   newsRoutes.js
+#   predictionRoutes.js
+#   advisorRoutes.js
+#   learningRoutes.js
+#   communityRoutes.js
+#
+# Once created, uncomment the corresponding lines in server/index.js.

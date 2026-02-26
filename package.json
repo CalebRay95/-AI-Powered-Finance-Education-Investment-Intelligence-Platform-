@@ -1,0 +1,20 @@
+{
+  "name": "gift-platform",
+  "version": "1.0.0",
+  "description": "GIFT — AI-Powered Finance Education & Investment Intelligence Platform",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently --names \"SERVER,CLIENT\" --prefix-colors \"green,cyan\" \"npm run server\" \"npm run client\"",
+    "dev:all": "concurrently --names \"SERVER,CLIENT,ML\" --prefix-colors \"green,cyan,yellow\" \"npm run server\" \"npm run client\" \"npm run ml\"",
+    "server": "cd server && npm run dev",
+    "client": "cd client && npm run dev",
+    "ml": "cd ml-service && uvicorn main:app --reload --port 8000",
+    "install:all": "npm install --prefix server && npm install --prefix client",
+    "seed": "cd server && node data/seedCourses.js",
+    "build:core": "cd core-engine && cmake -B build -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release",
+    "build:client": "cd client && npm run build"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

@@ -1,0 +1,270 @@
+[
+  {
+    "courseId": "stocks-101",
+    "title": "Stock Market 101",
+    "level": "Beginner",
+    "description": "Learn the fundamentals of stock markets, how equities work, and how to read a stock quote.",
+    "icon": "📈",
+    "estimatedMinutes": 40,
+    "lessons": [
+      {
+        "lessonId": "what-is-a-stock",
+        "title": "What is a Stock?",
+        "content": "A stock (also called an equity or share) represents a unit of ownership in a company. When a corporation wants to raise money, it can issue shares to the public through a process called an Initial Public Offering (IPO). Investors who buy these shares become partial owners — or shareholders — of the business.\n\nAs a shareholder you are entitled to a proportional claim on the company's assets and earnings. If the company performs well and grows its profits, the value of your shares typically rises. Conversely, poor performance or adverse market conditions can cause share prices to fall.\n\nThere are two main types of stock: common stock and preferred stock. Common stockholders usually have voting rights at shareholder meetings and may receive dividends. Preferred stockholders typically receive fixed dividends and have priority over common stockholders if the company is liquidated, but they generally do not have voting rights."
+      },
+      {
+        "lessonId": "how-markets-work",
+        "title": "How Stock Markets Work",
+        "content": "Stock exchanges are organised marketplaces where buyers and sellers trade shares. Major exchanges include the New York Stock Exchange (NYSE), NASDAQ, the London Stock Exchange (LSE), and the Bombay Stock Exchange (BSE). Each exchange sets rules about which companies can list their shares and how trades must be conducted.\n\nPrices on an exchange are determined by supply and demand. If more investors want to buy a stock than sell it, the price rises. If more want to sell than buy, the price falls. This continuous auction process happens electronically in milliseconds during market hours.\n\nBrokers — either human or algorithmic — act as intermediaries. A market order instructs your broker to buy or sell immediately at the best available price. A limit order lets you specify the maximum price you will pay (buy) or the minimum price you will accept (sell), giving you more control but with no guarantee of execution."
+      },
+      {
+        "lessonId": "reading-a-stock-quote",
+        "title": "Reading a Stock Quote",
+        "content": "A stock quote provides a snapshot of a stock's current and recent trading activity. Key fields include the ticker symbol (a unique abbreviation such as AAPL for Apple Inc.), the last traded price, the change from the previous day's closing price, and the percentage change.\n\nThe 52-week high and low show the range of prices over the past year, giving context to whether the current price is near its peak or trough. Trading volume indicates how many shares changed hands during the session — high volume often signals strong investor interest or a major news event.\n\nMarket capitalisation (market cap) is the total market value of a company's outstanding shares, calculated as share price × total shares outstanding. It is used to classify companies as small-cap, mid-cap, or large-cap and helps investors gauge the relative size of a company."
+      },
+      {
+        "lessonId": "dividends-and-returns",
+        "title": "Dividends and Total Return",
+        "content": "Investors can earn money from stocks in two ways: capital appreciation (the share price rising) and dividends (cash payments made from company profits). Not all companies pay dividends; fast-growing technology firms often reinvest earnings back into the business rather than distributing them.\n\nThe dividend yield is the annual dividend per share divided by the share price, expressed as a percentage. A yield of 3% means you earn $3 in dividends for every $100 invested. The payout ratio measures what fraction of earnings are paid as dividends — a very high payout ratio may be unsustainable.\n\nTotal return combines both price gains and dividends. When comparing investments, always consider total return rather than price change alone, because dividends can represent a significant proportion of long-term gains — historically, dividends have contributed roughly 40% of the total return of the S&P 500 index over multi-decade periods."
+      },
+      {
+        "lessonId": "stock-indices",
+        "title": "Stock Market Indices",
+        "content": "A stock market index tracks the performance of a group of stocks, serving as a benchmark for the broader market or a specific segment. The S&P 500 tracks the 500 largest US companies by market cap; the Dow Jones Industrial Average (DJIA) follows 30 large blue-chip companies; the NASDAQ Composite is weighted toward technology stocks.\n\nIndices are calculated using different methodologies. The S&P 500 is market-cap weighted, meaning larger companies have more influence on the index level. The DJIA is price-weighted, so higher-priced shares have more impact regardless of company size.\n\nInvestors use indices in several ways: as a benchmark to measure portfolio performance, as a reference point for economic health, and as the basis for index funds and ETFs (Exchange-Traded Funds) that allow investors to buy a diversified slice of the market with a single transaction."
+      }
+    ],
+    "quiz": [
+      {
+        "question": "What does owning a stock represent?",
+        "options": ["A loan to the company", "Partial ownership of the company", "A guaranteed return contract", "A bond issued by the company"],
+        "correctIndex": 1,
+        "explanation": "A stock (equity share) represents partial ownership of the issuing company. Shareholders have a claim on assets and earnings proportional to their holdings."
+      },
+      {
+        "question": "Which order type guarantees immediate execution at the best available price?",
+        "options": ["Stop-loss order", "Limit order", "Market order", "Trailing stop order"],
+        "correctIndex": 2,
+        "explanation": "A market order instructs the broker to execute the trade immediately at the best available price, unlike a limit order which only executes at a specified price or better."
+      },
+      {
+        "question": "What does 'market capitalisation' measure?",
+        "options": ["Annual revenue of a company", "Total market value of outstanding shares", "Total debt of a company", "Daily trading volume"],
+        "correctIndex": 1,
+        "explanation": "Market cap = share price × total shares outstanding. It measures the total market value of a company and is used to classify companies by size."
+      },
+      {
+        "question": "Which index is market-cap weighted?",
+        "options": ["Dow Jones Industrial Average", "NASDAQ Composite only", "S&P 500", "Nikkei 225"],
+        "correctIndex": 2,
+        "explanation": "The S&P 500 is a market-cap weighted index, meaning companies with larger market capitalisations have a greater influence on the index level."
+      },
+      {
+        "question": "Historically, dividends have contributed approximately what fraction of S&P 500 total returns over long periods?",
+        "options": ["Less than 10%", "About 25%", "About 40%", "Over 60%"],
+        "correctIndex": 2,
+        "explanation": "Research shows dividends have historically contributed roughly 40% of the S&P 500's total return over multi-decade periods, making them a crucial component of long-term investing."
+      }
+    ]
+  },
+  {
+    "courseId": "bonds-fixed-income",
+    "title": "Bonds & Fixed Income",
+    "level": "Beginner",
+    "description": "Understand how bonds work, why they are used in portfolios, and how interest rates affect bond prices.",
+    "icon": "🏦",
+    "estimatedMinutes": 35,
+    "lessons": [
+      {
+        "lessonId": "what-is-a-bond",
+        "title": "What is a Bond?",
+        "content": "A bond is a fixed-income instrument that represents a loan made by an investor to a borrower — typically a government or corporation. The borrower agrees to pay interest (called the coupon) at regular intervals and to repay the face value (principal) at a specified future date called the maturity date.\n\nBonds are issued to raise capital. Governments issue bonds to fund public spending; corporations issue them to finance expansion, acquisitions, or operations. Because the cash flows are defined in advance, bonds are sometimes called 'fixed-income' instruments.\n\nKey bond terms: face value (par value) is the amount repaid at maturity, typically $1,000 per bond. The coupon rate is the annual interest payment expressed as a percentage of face value. The yield is the actual return you earn, which depends on the price you paid."
+      },
+      {
+        "lessonId": "bond-price-yield",
+        "title": "Bond Prices and Yields",
+        "content": "Bond prices and yields move in opposite directions — this is one of the most important concepts in fixed income. When market interest rates rise, newly issued bonds offer higher coupons, making existing lower-coupon bonds less attractive. To compensate, existing bonds must fall in price until their yield matches the new market rate.\n\nThe yield-to-maturity (YTM) is the total return anticipated if the bond is held until it matures, accounting for the current price, all coupon payments, and the repayment of face value. YTM is the most complete measure of a bond's return and allows fair comparison across bonds.\n\nDiscount bonds trade below face value (price < par) and have yields above their coupon rate. Premium bonds trade above face value (price > par) and have yields below their coupon rate. Par bonds trade at exactly face value where price equals par."
+      },
+      {
+        "lessonId": "bond-types",
+        "title": "Types of Bonds",
+        "content": "Government bonds are issued by national governments and are considered the safest type because governments can raise taxes or print money to meet obligations. US Treasury bonds, UK Gilts, and Indian Government Securities (G-Secs) are prominent examples. They typically offer lower yields in exchange for safety.\n\nCorporate bonds are issued by companies and carry more credit risk than government bonds. Investment-grade bonds are rated BBB- or above by agencies such as Moody's or S&P; high-yield (junk) bonds are rated below BBB- and offer higher coupons to compensate investors for the elevated default risk.\n\nMunicipal bonds (munis) are issued by local governments in the US and are often exempt from federal income tax, making them especially attractive for high-income investors. Inflation-linked bonds (such as US TIPS) adjust their principal based on inflation, protecting purchasing power over time."
+      },
+      {
+        "lessonId": "duration-and-risk",
+        "title": "Duration and Interest Rate Risk",
+        "content": "Duration measures how sensitive a bond's price is to changes in interest rates. Specifically, modified duration estimates the percentage change in a bond's price for a 1% change in interest rates. A bond with duration 7 will lose approximately 7% in price if rates rise by 1%.\n\nLonger-maturity bonds have higher duration because more of their cash flows are in the distant future, making them more sensitive to rate changes. Zero-coupon bonds have the highest duration relative to their maturity because all cash flow occurs at maturity.\n\nCredit risk is the possibility that the issuer defaults and cannot make interest or principal payments. Rating agencies publish credit ratings for bonds, but investors should also examine the issuer's financial health, debt levels, and industry outlook. Diversification across issuers, sectors, and geographies helps manage credit risk."
+      }
+    ],
+    "quiz": [
+      {
+        "question": "What is the 'coupon' of a bond?",
+        "options": ["The bond's maturity date", "The face value at redemption", "The periodic interest payment", "The credit rating of the issuer"],
+        "correctIndex": 2,
+        "explanation": "The coupon is the periodic (typically semi-annual or annual) interest payment made to the bondholder, expressed as a percentage of the bond's face value."
+      },
+      {
+        "question": "If market interest rates rise, what generally happens to existing bond prices?",
+        "options": ["They rise", "They fall", "They stay the same", "They become unpredictable"],
+        "correctIndex": 1,
+        "explanation": "Bond prices and yields move inversely. When market rates rise, existing bonds offering lower coupons become less attractive, so their prices fall until their yield matches the new market rate."
+      },
+      {
+        "question": "Which bond type is most directly protected against inflation?",
+        "options": ["Corporate high-yield bonds", "Zero-coupon bonds", "Inflation-linked bonds (e.g., TIPS)", "Municipal bonds"],
+        "correctIndex": 2,
+        "explanation": "Inflation-linked bonds such as US TIPS adjust their principal based on a consumer price index, preserving the investor's real purchasing power as inflation rises."
+      },
+      {
+        "question": "A bond with higher duration is more sensitive to:",
+        "options": ["Dividend changes", "Interest rate changes", "Currency fluctuations", "Equity market movements"],
+        "correctIndex": 1,
+        "explanation": "Duration measures price sensitivity to interest rate changes. A higher duration means the bond's price will move more (up or down) for a given change in interest rates."
+      },
+      {
+        "question": "Which organisation publishes credit ratings for bonds?",
+        "options": ["The Federal Reserve", "Moody's and S&P", "The World Bank", "The IMF"],
+        "correctIndex": 1,
+        "explanation": "Rating agencies such as Moody's, Standard & Poor's (S&P), and Fitch publish credit ratings that assess the likelihood of bond issuers meeting their obligations."
+      }
+    ]
+  },
+  {
+    "courseId": "risk-management",
+    "title": "Risk Management",
+    "level": "Intermediate",
+    "description": "Learn how to identify, measure, and mitigate financial risk using quantitative tools and portfolio strategies.",
+    "icon": "🛡️",
+    "estimatedMinutes": 55,
+    "lessons": [
+      {
+        "lessonId": "types-of-risk",
+        "title": "Types of Financial Risk",
+        "content": "Financial risk refers to the possibility of losing money on an investment or business venture. Understanding the different categories of risk is the foundation of effective risk management.\n\nMarket risk (systematic risk) is the risk of losses from movements in market prices — stock prices, interest rates, exchange rates, and commodity prices. This risk affects all investments to some degree and cannot be eliminated through diversification alone.\n\nCredit risk is the risk that a counterparty defaults on a financial obligation. Liquidity risk arises when an asset cannot be sold quickly enough to prevent or minimise a loss. Operational risk stems from failures in internal processes, people, or systems. Understanding which risks you face is the first step toward managing them."
+      },
+      {
+        "lessonId": "standard-deviation",
+        "title": "Volatility and Standard Deviation",
+        "content": "Volatility is the most common measure of market risk. Statistically, it is the standard deviation of an asset's returns over a defined period. A higher standard deviation means returns are more widely dispersed around the average — the asset experiences larger swings in both directions.\n\nAnnualised volatility is calculated by multiplying the daily standard deviation by the square root of 252 (the typical number of trading days in a year). This allows meaningful comparison across assets with different trading frequencies.\n\nWhile volatility is intuitive and widely used, it treats upside and downside deviations equally. Many risk practitioners prefer downside-focused measures such as semi-variance or the Sortino ratio, which only penalise downside volatility. The choice of measure depends on the investor's loss aversion and investment objectives."
+      },
+      {
+        "lessonId": "value-at-risk",
+        "title": "Value at Risk (VaR)",
+        "content": "Value at Risk (VaR) is a statistical measure that estimates the maximum loss an investment portfolio is likely to suffer over a given time horizon at a specified confidence level. For example, a 1-day 95% VaR of $10,000 means there is a 5% chance the portfolio will lose more than $10,000 in a single day.\n\nThere are three main methods for calculating VaR: the Historical Simulation method uses actual past returns to estimate the loss distribution; the Variance-Covariance (parametric) method assumes returns are normally distributed; the Monte Carlo method generates thousands of random return scenarios based on assumed statistical properties.\n\nVaR has important limitations: it does not tell you how large losses beyond the threshold will be (this is addressed by Expected Shortfall or CVaR), it assumes historical patterns continue, and it can give a false sense of security during market crises when correlations spike unexpectedly."
+      },
+      {
+        "lessonId": "sharpe-ratio",
+        "title": "The Sharpe Ratio",
+        "content": "The Sharpe ratio measures risk-adjusted return — how much excess return you receive per unit of total risk. It is calculated as the portfolio's excess return above the risk-free rate divided by the portfolio's standard deviation: Sharpe = (Rp - Rf) / σp.\n\nA higher Sharpe ratio is generally better. A ratio above 1.0 is considered acceptable, above 2.0 is very good, and above 3.0 is exceptional. The Sharpe ratio allows investors to compare portfolios with different risk levels on a common scale.\n\nRelated measures include the Treynor ratio, which uses beta (systematic risk) instead of total standard deviation in the denominator, and the Information ratio, which measures active return against tracking error. Each ratio answers a slightly different question about the source and quality of returns."
+      },
+      {
+        "lessonId": "beta-and-correlation",
+        "title": "Beta and Correlation",
+        "content": "Beta measures the sensitivity of an asset's returns to movements in a benchmark (usually the market). A beta of 1.0 means the asset moves in line with the market; a beta of 1.5 means the asset typically rises or falls 1.5% for every 1% market move; a beta below 1.0 indicates lower sensitivity.\n\nCorrelation measures the statistical relationship between two assets' returns, ranging from -1 to +1. A correlation of +1 means they move perfectly together; -1 means they move in exact opposition; 0 means no linear relationship. Low or negative correlation between portfolio assets is central to diversification benefits.\n\nBeta can be decomposed: total risk = systematic risk (beta × market risk) + idiosyncratic risk (firm-specific, diversifiable). Only systematic risk is compensated by expected return in theory (the CAPM framework), because idiosyncratic risk can be eliminated through portfolio construction."
+      },
+      {
+        "lessonId": "hedging-strategies",
+        "title": "Hedging Strategies",
+        "content": "Hedging involves taking a position that offsets the risk of another position. The goal is not to make money but to reduce potential losses, often at the cost of limiting potential gains.\n\nCommon hedging instruments include options, futures, and inverse ETFs. A put option gives the holder the right to sell an asset at a predetermined price (the strike price), acting as insurance against price declines. Selling futures contracts locks in a future price, protecting against adverse moves.\n\nPortfolio managers use various hedging techniques: beta hedging adjusts a portfolio's market exposure to a target level; duration hedging protects bond portfolios against rate rises; currency hedging removes foreign exchange risk for international investments. Effective hedging requires clear objectives, cost analysis, and regular rebalancing as market conditions change."
+      }
+    ],
+    "quiz": [
+      {
+        "question": "Which type of risk CANNOT be eliminated through diversification?",
+        "options": ["Idiosyncratic risk", "Firm-specific risk", "Systematic (market) risk", "Operational risk"],
+        "correctIndex": 2,
+        "explanation": "Systematic risk (market risk) affects all investments and cannot be diversified away. Idiosyncratic (firm-specific) risk can be reduced through holding a diversified portfolio."
+      },
+      {
+        "question": "A 1-day 95% VaR of $5,000 means:",
+        "options": ["You will not lose more than $5,000 any day", "There is a 5% chance of losing more than $5,000 in a day", "Your average daily loss is $5,000", "You will gain at least $5,000 on 95% of days"],
+        "correctIndex": 1,
+        "explanation": "VaR expresses a loss threshold at a confidence level. A 95% VaR means losses will exceed $5,000 on only 5% of days (or 1 in 20 trading days) under normal market conditions."
+      },
+      {
+        "question": "The Sharpe ratio is calculated as:",
+        "options": ["Return / Beta", "(Portfolio Return - Risk-Free Rate) / Standard Deviation", "Standard Deviation / Return", "Beta × Market Return"],
+        "correctIndex": 1,
+        "explanation": "Sharpe = (Rp - Rf) / σp. It measures the excess return per unit of total risk, enabling comparison of portfolios with different volatility profiles."
+      },
+      {
+        "question": "A stock with a beta of 0.5 would be expected to:",
+        "options": ["Move twice as much as the market", "Move opposite to the market", "Move half as much as the market", "Be uncorrelated with the market"],
+        "correctIndex": 2,
+        "explanation": "Beta measures sensitivity to market movements. A beta of 0.5 implies the stock typically moves 0.5% for every 1% market move — half the market's magnitude."
+      },
+      {
+        "question": "Which instrument gives the holder the right (but not obligation) to sell an asset at a set price — commonly used as a hedge?",
+        "options": ["Call option", "Futures contract", "Put option", "Forward contract"],
+        "correctIndex": 2,
+        "explanation": "A put option gives the holder the right to sell at the strike price, acting like insurance against price declines. It is one of the most common hedging tools for equity portfolios."
+      }
+    ]
+  },
+  {
+    "courseId": "diversification",
+    "title": "Portfolio Diversification",
+    "level": "Intermediate",
+    "description": "Explore how diversification reduces risk without sacrificing expected return, and learn to construct efficient portfolios.",
+    "icon": "🎯",
+    "estimatedMinutes": 50,
+    "lessons": [
+      {
+        "lessonId": "why-diversify",
+        "title": "Why Diversify?",
+        "content": "Diversification is the practice of spreading investments across different assets, sectors, and geographies to reduce the impact of any single investment's poor performance on the overall portfolio. The core idea is that different assets often do not move together, so losses in one area may be offset by gains in another.\n\nHarry Markowitz formalised this concept in Modern Portfolio Theory (MPT) in 1952, showing mathematically that combining assets with low correlations can reduce portfolio volatility without necessarily reducing expected return. This insight earned him the Nobel Prize in Economics in 1990.\n\nA simple analogy: if you carry all your goods in one basket and drop it, you lose everything. Spread across many baskets, a single accident is much less catastrophic. Diversification does not eliminate risk, but it efficiently manages the risk you cannot avoid."
+      },
+      {
+        "lessonId": "correlation-in-portfolios",
+        "title": "Correlation in Portfolio Construction",
+        "content": "The diversification benefit depends heavily on the correlation between assets. When two assets have a correlation of +1, combining them provides no diversification benefit — they move in lockstep. When correlation is -1, combining them (in the right proportions) can theoretically eliminate all volatility. Real-world assets typically have correlations between these extremes.\n\nAsset classes with historically low correlations include stocks and government bonds (often negative in crisis periods), domestic and international equities, equities and commodities, and equities and real estate. However, correlations are not static — they tend to increase during market crises, precisely when diversification is most needed.\n\nPractical portfolio construction involves selecting assets with varying correlation profiles. A simple 60/40 portfolio (60% equities, 40% bonds) has been a popular starting point for balanced investors because of the historically low equity-bond correlation."
+      },
+      {
+        "lessonId": "efficient-frontier",
+        "title": "The Efficient Frontier",
+        "content": "The efficient frontier is a concept from Modern Portfolio Theory representing the set of optimal portfolios that offer the highest expected return for each level of risk (or equivalently, the lowest risk for each level of expected return). Portfolios on the efficient frontier are considered 'efficient'; all others are suboptimal.\n\nConstructing the efficient frontier requires estimates of each asset's expected return, variance, and pairwise correlations. By varying the portfolio weights across assets and plotting the resulting risk-return combinations, a curved boundary emerges — the frontier. The tangency portfolio (where a line from the risk-free rate is tangent to the frontier) represents the optimal risky portfolio in the CAPM framework.\n\nIn practice, the efficient frontier is sensitive to the input estimates (expected returns are notoriously difficult to predict). Small changes in assumptions can lead to very different optimal portfolios — a limitation known as 'estimation error'. Practitioners often use robust optimisation or constraints to avoid extreme portfolio tilts."
+      },
+      {
+        "lessonId": "asset-allocation",
+        "title": "Strategic Asset Allocation",
+        "content": "Strategic asset allocation (SAA) is the long-term target allocation to broad asset classes — typically equities, fixed income, cash, and alternatives — based on an investor's goals, time horizon, and risk tolerance. It is the most important driver of long-term portfolio performance, responsible for over 90% of return variability in studies of pension funds.\n\nFactors influencing SAA include investment horizon (longer horizons can tolerate more equity risk), return objectives, liquidity needs, tax status, and regulatory constraints. A young investor saving for retirement in 30 years might hold 80–90% in equities; a retiree drawing income might hold 40–60% in bonds and cash.\n\nTactical asset allocation (TAA) involves short-term deviations from the SAA targets based on market opportunities or near-term views. Rebalancing periodically restores the portfolio to its target weights — it naturally implements a 'buy low, sell high' discipline by trimming outperforming assets and adding to underperformers."
+      },
+      {
+        "lessonId": "rebalancing",
+        "title": "Portfolio Rebalancing",
+        "content": "Over time, the assets in a portfolio drift from their target weights as prices change. If equities outperform, they grow to a larger share of the portfolio than intended, increasing risk. Rebalancing restores the portfolio to its target allocation.\n\nCommon rebalancing approaches include calendar rebalancing (on fixed dates, e.g., quarterly or annually), threshold rebalancing (when any asset class drifts more than a set percentage, e.g., 5%, from its target), and constant-proportion strategies. Each approach involves trade-offs between transaction costs and keeping the portfolio aligned with its risk objective.\n\nRebalancing has an empirical benefit beyond risk control: it tends to add a small return premium by systematically buying assets that have lagged (buying cheap) and selling assets that have risen (selling expensive). This 'rebalancing bonus' is most pronounced when assets have similar expected returns but low correlation."
+      }
+    ],
+    "quiz": [
+      {
+        "question": "Who formalised diversification through Modern Portfolio Theory?",
+        "options": ["Warren Buffett", "Benjamin Graham", "Harry Markowitz", "Eugene Fama"],
+        "correctIndex": 2,
+        "explanation": "Harry Markowitz introduced Modern Portfolio Theory in 1952, showing mathematically how combining assets with low correlations reduces portfolio risk. He won the Nobel Prize in Economics in 1990."
+      },
+      {
+        "question": "What correlation between two assets would eliminate all portfolio volatility if combined correctly?",
+        "options": ["+1", "0", "-0.5", "-1"],
+        "correctIndex": 3,
+        "explanation": "A correlation of -1 (perfect negative correlation) means the assets move in exact opposition. In theory, the right combination of perfectly negatively correlated assets eliminates all portfolio volatility."
+      },
+      {
+        "question": "What does the efficient frontier represent?",
+        "options": ["The riskiest possible portfolios", "Portfolios with the highest return for each risk level", "Only bond portfolios", "Portfolios with equal weights in all assets"],
+        "correctIndex": 1,
+        "explanation": "The efficient frontier is the set of optimal portfolios offering the maximum expected return for each level of risk. Any portfolio below or to the right of the frontier is suboptimal."
+      },
+      {
+        "question": "Strategic asset allocation is primarily determined by:",
+        "options": ["Daily market news", "Short-term price momentum", "Investor goals, time horizon, and risk tolerance", "The current P/E ratio of the market"],
+        "correctIndex": 2,
+        "explanation": "SAA sets long-term target weights across asset classes based on an investor's objectives, time horizon, and risk tolerance — it is the dominant driver of long-term portfolio performance."
+      },
+      {
+        "question": "What is the main purpose of portfolio rebalancing?",
+        "options": ["To maximise short-term gains", "To eliminate all investment risk", "To restore the portfolio to its target risk/allocation", "To avoid paying any taxes"],
+        "correctIndex": 2,
+        "explanation": "Rebalancing restores the portfolio to its intended asset allocation after market movements cause drift. It controls risk and can add a small return benefit by systematically buying laggards and trimming winners."
+      }
+    ]
+  }
+]

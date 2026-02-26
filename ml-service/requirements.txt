@@ -1,0 +1,15 @@
+fastapi
+uvicorn[standard]
+python-dotenv
+httpx
+yfinance
+scikit-learn
+pandas
+numpy
+joblib
+vaderSentiment
+google-generativeai>=0.7,<1.0
+xgboost
+tensorflow
+transformers
+torch

@@ -1,0 +1,323 @@
+{
+  "info": {
+    "name": "GIFT API",
+    "_postman_id": "gift-api-collection-v2",
+    "description": "GIFT — AI-Powered Finance Education & Investment Intelligence Platform.\n\nImport this collection, set the `baseUrl` variable to your server URL, and run **Login** to auto-populate `{{token}}`.\n\nReal-time Community Chat is handled via Socket.IO — see the Community folder for the REST message history endpoint.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000",
+      "type": "string",
+      "description": "Server base URL. Change to your deployed URL."
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string",
+      "description": "JWT — auto-populated by the Login test script."
+    }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "description": "User registration, login, and optional Web3 wallet authentication.",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/auth/register",
+            "description": "Create a new user account. Returns a JWT on success. No auth header required.",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Jane Doe\",\n  \"email\": \"jane@example.com\",\n  \"password\": \"Secret123!\"\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          }
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/auth/login",
+            "description": "Authenticate with email + password. Returns a JWT. The test script auto-stores the token in {{token}}.",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"jane@example.com\",\n  \"password\": \"Secret123!\"\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Capture JWT\", function () {",
+                  "  const json = pm.response.json();",
+                  "  if (json.token) {",
+                  "    pm.collectionVariables.set(\"token\", json.token);",
+                  "    console.log(\"Token saved:\", json.token.slice(0, 20) + \"...\");",
+                  "  }",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Web3 Nonce",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/auth/web3/nonce?address=0xYourWalletAddress",
+            "description": "Request a one-time nonce for the given wallet address. Sign with MetaMask, then POST to /api/auth/web3. No auth header required.",
+            "header": [],
+            "body": { "mode": "raw", "raw": "" }
+          }
+        },
+        {
+          "name": "Web3 Login",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/auth/web3",
+            "description": "Authenticate via signed wallet nonce (MetaMask / Web3 bonus feature). Returns a JWT on success. No auth header required.",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"address\": \"0xYourWalletAddress\",\n  \"signature\": \"0xSignedNonce\"\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Portfolio",
+      "description": "Manage and analyze user portfolio holdings using the C++ risk engine.",
+      "item": [
+        {
+          "name": "Get Portfolio",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/portfolio/:userId",
+            "description": "Fetch a user's saved portfolio (holdings + last analysis results). Replace :userId with the authenticated user's ID.\n\nExpected response: the portfolio document directly — { _id, userId, holdings, totalValue, riskScore, sharpeRatio, ... }\n\nNote: the document is returned at the top level, not wrapped in a { portfolio: ... } envelope.",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "body": { "mode": "raw", "raw": "" }
+          }
+        },
+        {
+          "name": "Save Holdings",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/portfolio/holdings",
+            "description": "Save or update portfolio holdings for the authenticated user.\n\nExpected response: { message: 'Holdings saved', portfolio: { ... } }",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"holdings\": [\n    { \"ticker\": \"AAPL\", \"shares\": 10, \"avgBuyPrice\": 150.25 },\n    { \"ticker\": \"MSFT\", \"shares\": 5,  \"avgBuyPrice\": 320.50 }\n  ]\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          }
+        },
+        {
+          "name": "Analyze Portfolio",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/portfolio/analyze",
+            "description": "Run full C++ risk analysis (VaR, Sharpe Ratio, Beta, Monte Carlo) on the user's portfolio. Pass an empty holdings array to use saved holdings.\n\nExpected response: { analysis: { riskScore, varDaily, sharpeRatio, beta, suggestion, ... } }",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"holdings\": []\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "News",
+      "description": "Live financial news with ML-powered VADER sentiment analysis.",
+      "item": [
+        {
+          "name": "Get Live News",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/news/live?query=stock+market+finance",
+            "description": "Fetch and analyze live financial news. Results are cached per query for 10 minutes.\n\nQuery params: query — search terms (optional).\n\nExpected response: { articles: [{ title, source, sentiment, sentimentScore, url, publishedAt }] }",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "body": { "mode": "raw", "raw": "" }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Prediction",
+      "description": "Stock prediction playground — submit predictions, get AI predictions, and review history.",
+      "item": [
+        {
+          "name": "Submit Prediction",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/prediction/submit",
+            "description": "Submit a user prediction for a stock ticker. The ML service generates a concurrent AI prediction and an explanation.\n\nExpected response: { prediction: { ticker, userPrediction, aiPrediction, explanation, timestamp } }",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"ticker\": \"AAPL\",\n  \"userPrediction\": \"UP\"\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          }
+        },
+        {
+          "name": "Get AI Prediction",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/prediction/ai/:ticker",
+            "description": "Get the ML model's prediction for a given ticker. Replace :ticker with e.g. AAPL, MSFT, GOOGL.\n\nExpected response: { ticker, prediction, confidence, model }",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "body": { "mode": "raw", "raw": "" }
+          }
+        },
+        {
+          "name": "Get Prediction History",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/prediction/history",
+            "description": "Retrieve the authenticated user's full prediction history, sorted by most recent.\n\nExpected response: { predictions: [{ ticker, userPrediction, aiPrediction, actualOutcome, explanation, timestamp }] }",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "body": { "mode": "raw", "raw": "" }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Advisor",
+      "description": "Gemini-powered AI financial strategy advisor with context from portfolio, news, and predictions.",
+      "item": [
+        {
+          "name": "Chat with AI Advisor",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/advisor/chat",
+            "description": "Send a message to the AI advisor. The advisor has access to the user's portfolio snapshot, recent prediction history, and market news to personalize responses.\n\nExpected response: { reply: '...', context: { portfolio: bool, news: bool, predictions: bool } }",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"What is my current portfolio risk and how should I rebalance?\"\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Learning",
+      "description": "Finance Academy — courses, lessons, quizzes, and progress tracking.",
+      "item": [
+        {
+          "name": "Get All Courses",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/learning/courses",
+            "description": "Fetch all available courses with the authenticated user's progress merged in.\n\nExpected response: an array of course objects at the top level — [{ _id, title, description, lessons, progressPct, quizCompleted, ... }]\n\nNote: the array is returned directly, not wrapped in a { courses: ... } envelope.",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "body": { "mode": "raw", "raw": "" }
+          }
+        },
+        {
+          "name": "Get Course by ID",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/learning/courses/:courseId",
+            "description": "Fetch a single course with full lesson content and the user's progress. Replace :courseId with a course ID from Get All Courses.\n\nExpected response: { course: { _id, title, lessons: [{ id, title, content }], progressPct } }",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "body": { "mode": "raw", "raw": "" }
+          }
+        },
+        {
+          "name": "Submit Quiz",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/learning/quiz/:courseId/submit",
+            "description": "Submit answers for a course quiz. Answers are a 0-indexed array matching question order.\n\nExpected response: { score, total, passed, correctAnswers }",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"answers\": [0, 2, 1, 3, 0]\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          }
+        },
+        {
+          "name": "Mark Lesson Progress",
+          "request": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/api/learning/progress/:courseId",
+            "description": "Mark a lesson as completed for the authenticated user. Idempotent — calling twice with the same lessonId has no effect.\n\nExpected response: { message: 'Progress updated', completedLessons: [...] }",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"lessonId\": \"lesson-1\"\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Community",
+      "description": "Community Hub. Real-time messaging is handled via Socket.IO (send_message / new_message events). This folder exposes the REST history endpoint only.",
+      "item": [
+        {
+          "name": "Get Room Message History",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/community/messages/:room",
+            "description": "Fetch the last 100 messages for a room, sorted oldest-first.\n\nValid room slugs: general | options-trading | crypto-analysis | dividend-investing\n\nExpected response: [{ _id, userId, userName, content, room, timestamp, parentId }]\n\nNote: Sending messages is done via Socket.IO send_message event — not REST.",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "body": { "mode": "raw", "raw": "" }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Health",
+      "description": "Server health check — no auth required.",
+      "item": [
+        {
+          "name": "API Health Check",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/health",
+            "description": "Confirms the Express server and MongoDB connection are alive.\n\nExpected response: { status: 'ok', db: 'connected', uptime: <seconds> }",
+            "header": [],
+            "body": { "mode": "raw", "raw": "" }
+          }
+        }
+      ]
+    }
+  ]
+}
