@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 # FinX — AI-Powered Finance Education & Investment Intelligence Platform
+=======
+#  AI-Powered Finance Education & Investment Intelligence Platform
+>>>>>>> c84d8eb3aeac38fa711d49cc1c435dde791776fb
 
 > **CODENEXUS Hackathon** | Full-Stack Financial Ecosystem
 
