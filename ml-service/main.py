@@ -17,7 +17,7 @@ from routers import portfolio_ai
 from routers import advisor
 
 app = FastAPI(
-    title="GIFT ML Service",
+    title="FinX ML Service",
     description="Machine learning microservice for stock prediction, news sentiment, and AI advisory.",
     version="0.1.0",
 )
@@ -44,4 +44,4 @@ app.include_router(advisor.router,     prefix="/advisor",    tags=["Advisor"])
 # ── Health Check ──────────────────────────────────────────────────────────────
 @app.get("/health", tags=["Health"])
 async def health():
-    return {"status": "ok", "service": "GIFT ML Service"}
+    return {"status": "ok", "service": "FinX ML Service"}

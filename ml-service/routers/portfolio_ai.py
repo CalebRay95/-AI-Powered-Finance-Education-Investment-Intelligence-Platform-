@@ -150,10 +150,12 @@ async def analyze_portfolio(body: PortfolioAnalyzeRequest):
         return _fallback(body)
 
     try:
-        import google.generativeai as genai
-        genai.configure(api_key=api_key)
-        model    = genai.GenerativeModel("gemini-2.0-flash")
-        response = model.generate_content(_build_prompt(body))
+        from google import genai
+        client   = genai.Client(api_key=api_key)
+        response = client.models.generate_content(
+            model="gemini-2.0-flash",
+            contents=_build_prompt(body),
+        )
         sections = _parse_sections(response.text.strip())
 
         # If parsing failed to extract any section, use fallback

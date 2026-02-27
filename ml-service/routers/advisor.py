@@ -19,18 +19,17 @@ from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 
 # ── Gemini client (optional — graceful fallback when key absent) ──────────────
-# Always define _gemini_model so it's never unbound even if init raises.
-_gemini_model = None
+# Always define _gemini_client so it's never unbound even if init raises.
+_gemini_client = None
 try:
-    import google.generativeai as genai  # type: ignore
+    from google import genai as _genai_sdk  # type: ignore
 
     _GEMINI_KEY = os.getenv("GEMINI_API_KEY", "")
     if _GEMINI_KEY:
-        genai.configure(api_key=_GEMINI_KEY)
-        _gemini_model = genai.GenerativeModel("gemini-2.0-flash")
+        _gemini_client = _genai_sdk.Client(api_key=_GEMINI_KEY)
 except Exception as _init_exc:  # catches ImportError, AttributeError, API changes, etc.
     print(f"[advisor] Gemini init skipped: {_init_exc}")
-    _gemini_model = None
+    _gemini_client = None
 
 router = APIRouter()
 
@@ -323,8 +322,10 @@ def _fallback_reply(message: str, used: dict) -> str:
 async def _stream_gemini(full_prompt: str) -> AsyncGenerator[str, None]:
     """Yield SSE lines from a streamed Gemini generate_content call."""
     try:
-        response = _gemini_model.generate_content(full_prompt, stream=True)  # type: ignore[union-attr]
-        for chunk in response:
+        for chunk in _gemini_client.models.generate_content_stream(  # type: ignore[union-attr]
+            model="gemini-2.0-flash",
+            contents=full_prompt,
+        ):
             text = getattr(chunk, "text", "") or ""
             if text:
                 yield f"data: {json.dumps({'type': 'token', 'text': text})}\n\n"
@@ -360,13 +361,16 @@ async def chat(req: ChatRequest):
         system_prompt = ""
         used = {"portfolio": False, "news": False, "predictions": False}
 
-    if _gemini_model is None:
+    if _gemini_client is None:
         reply = _fallback_reply(req.message, used)
         return ChatResponse(reply=reply, contextUsed=used)
 
     try:
         full_prompt = f"{system_prompt}\n\nUser: {req.message}\n\nAssistant:"
-        response = _gemini_model.generate_content(full_prompt)
+        response = _gemini_client.models.generate_content(
+            model="gemini-2.0-flash",
+            contents=full_prompt,
+        )
         reply = (response.text or "").strip()
         if not reply:
             raise ValueError("Empty response from Gemini")
@@ -402,7 +406,7 @@ async def chat_stream(req: ChatRequest):
         _stream_with_context(
             context_event,
             full_prompt,
-            use_gemini=(_gemini_model is not None),
+            use_gemini=(_gemini_client is not None),
             fallback_text=fallback_text,
         ),
         media_type="text/event-stream",

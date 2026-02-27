@@ -110,11 +110,13 @@ async def generate_explanation(body: ExplainRequest):
         return {"explanation": _fallback_explanation(body)}
 
     try:
-        import google.generativeai as genai  # imported lazily so the router
-                                              # loads even without the package
-        genai.configure(api_key=api_key)
-        model = genai.GenerativeModel("gemini-1.5-flash")
-        response = model.generate_content(_build_prompt(body))
+        from google import genai  # imported lazily so the router
+                                  # loads even without the package
+        client = genai.Client(api_key=api_key)
+        response = client.models.generate_content(
+            model="gemini-2.0-flash",
+            contents=_build_prompt(body),
+        )
         explanation = response.text.strip()
     except Exception as exc:  # noqa: BLE001 — never let LLM errors break the flow
         explanation = _fallback_explanation(body) + f" (AI explanation unavailable: {exc})"

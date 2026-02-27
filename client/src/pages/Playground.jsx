@@ -74,16 +74,15 @@ export default function Playground() {
     : [];
   const latestRSI = rsiData[rsiData.length - 1]?.rsi ?? 50;
 
-  /* Fetch real chart data from ML service (uses CSV for FAANG) */
+  /* Fetch chart data via Node server proxy (never calls ML directly) */
   const fetchChart = useCallback(async (ticker) => {
     setCL(true); setErr(''); setChart([]);
     try {
-      const res = await fetch(`${ML_BASE}/prediction/chart/${ticker}`);
-      if (!res.ok) throw new Error(`Chart ${res.status}`);
-      const data = await res.json();
+      const { data } = await api.get(`/api/prediction/chart/${ticker}`);
+      if (data?.message) throw new Error(data.message);
       setChart(data);
     } catch (e) {
-      setErr(`Chart load failed for ${ticker}: ${e.message}`);
+      setErr(`Chart unavailable for ${ticker} — ML service may be offline.`);
     } finally { setCL(false); }
   }, []);
 
@@ -94,7 +93,8 @@ export default function Playground() {
       const res = await api.get(`/api/prediction/ai/${ticker}`);
       setML(res.data);
     } catch (e) {
-      setErr(prev => prev + ` ML: ${e.response?.data?.detail || e.message}`);
+      // Don't overwrite chart error — just leave mlData null, UI will show offline state
+      console.warn('[fetchML]', e.response?.data?.detail || e.message);
     } finally { setMLL(false); }
   }, []);
 
@@ -337,7 +337,6 @@ export default function Playground() {
               </div>
             ) : mlData ? (
               <div>
-                {/* Confidence arc + direction */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 14 }}>
                   <ConfArc val={confPct} color={mlData.aiPrediction === 'UP' ? '#00d68f' : '#ff3d5a'} />
                   <div>
@@ -398,7 +397,18 @@ export default function Playground() {
                 )}
               </div>
             ) : (
-              <div style={{ color: '#3a5068', fontSize: 12, textAlign: 'center', padding: '16px 0' }}>No prediction loaded</div>
+              <div style={{ textAlign: 'center', padding: '20px 8px' }}>
+                <div style={{ fontSize: 28, marginBottom: 10 }}>⚠️</div>
+                <div style={{ fontSize: 13, color: '#7090a8', fontWeight: 600, marginBottom: 6 }}>ML Service Offline</div>
+                <div style={{ fontSize: 11, color: '#3a5068', lineHeight: 1.7 }}>
+                  Start the ML service to enable predictions:<br />
+                  <code style={{ color: '#00e5ff', fontSize: 10 }}>uv run uvicorn main:app --reload</code>
+                </div>
+                <button onClick={() => fetchML(tk)}
+                  style={{ marginTop: 12, padding: '6px 16px', fontSize: 11, border: '1px solid #00e5ff33', borderRadius: 7, background: 'rgba(0,229,255,.05)', color: '#00e5ff', cursor: 'pointer', fontFamily: "'JetBrains Mono',monospace" }}>
+                  ↺ Retry
+                </button>
+              </div>
             )}
           </div>
 
@@ -424,7 +434,14 @@ export default function Playground() {
                     ▼ SHORT
                   </button>
                 </div>
-                {!mlData && <p style={{ fontSize: 11, color: '#3a5068', marginTop: 10, textAlign: 'center' }}>Waiting for ML model to load…</p>}
+                {!mlData && !mlLoading && (
+                  <p style={{ fontSize: 11, color: '#ff3d5a', marginTop: 10, textAlign: 'center' }}>
+                    ⚠️ ML service offline — predictions disabled
+                  </p>
+                )}
+                {!mlData && mlLoading && (
+                  <p style={{ fontSize: 11, color: '#3a5068', marginTop: 10, textAlign: 'center' }}>Loading ML model…</p>
+                )}
               </div>
             )}
             {phase === 'predicting' && (

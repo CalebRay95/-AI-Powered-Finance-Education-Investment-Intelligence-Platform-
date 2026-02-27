@@ -1,4 +1,4 @@
-# GIFT — AI-Powered Finance Education & Investment Intelligence Platform
+# FinX — AI-Powered Finance Education & Investment Intelligence Platform
 
 > **CODENEXUS Hackathon** | Full-Stack Financial Ecosystem
 
@@ -11,11 +11,11 @@ A unified, scalable web platform that bridges financial education, real-time mar
 Despite increased access to financial markets, a critical gap exists between financial learning and real-world application. Most individuals understand theoretical concepts but struggle to:
 
 - Interpret market movements
-- Analyze the impact of financial news
-- Manage portfolios effectively
+- Analyse the impact of financial news on stock prices
+- Build and manage portfolios with proper risk controls
 
 Existing platforms separate learning, trading tools, and advisory systems.  
-**GIFT** solves this by integrating all these into one intelligent ecosystem.
+**FinX** solves this by integrating all three into one intelligent ecosystem.
 
 ---
 
@@ -23,7 +23,320 @@ Existing platforms separate learning, trading tools, and advisory systems.
 
 | Layer | Technology |
 |---|---|
-| **Frontend** | React.js (JSX), TailwindCSS |
+| **Frontend** | React 18 (JSX) + TailwindCSS + Vite |
+| **Backend** | Node.js 18 + Express.js (ES Modules) |
+| **Database** | MongoDB 8.x + Mongoose ODM |
+| **ML / AI** | Python 3.11 + FastAPI + Uvicorn |
+| **AI Language Model** | Google Gemini (`google-genai` SDK v1.65+) |
+| **Stock Prediction** | XGBoost + LSTM (TensorFlow / Keras) |
+| **Sentiment Analysis** | FinBERT (HuggingFace Transformers) + VADER |
+| **Performance Core** | C++17 via Node.js N-API |
+| **Real-time** | Socket.IO (WebSocket) |
+| **Authentication** | JWT (jsonwebtoken) + bcrypt |
+| **Package Manager (Python)** | `uv` (fast Rust-based pip replacement) |
+
+---
+
+## Architecture
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                        Frontend  :5173                       │
+│            React 18 + TailwindCSS + Vite                    │
+│  Auth │ Academy │ Playground │ News │ Portfolio │ Advisor   │
+└──────────────────────┬──────────────────────────────────────┘
+                       │ REST + WebSocket
+┌──────────────────────▼──────────────────────────────────────┐
+│              Node.js / Express  :5000                       │
+│      Auth │ Portfolio │ News │ Prediction │ Advisor         │
+│                     Socket.IO                               │
+└──────┬──────────────────────────┬───────────────────────────┘
+       │ Mongoose                 │ HTTP (axios)
+┌──────▼──────┐        ┌──────────▼────────────────┐
+│  MongoDB     │        │   Python FastAPI  :8000   │
+│  :27017      │        │  - /prediction            │
+│  Users       │        │  - /advisor/chat (SSE)    │
+│  Portfolios │        │  - /news/live (FinBERT)   │
+│  Predictions │        │  - /explanation           │
+│  NewsCache   │        │  - /portfolio/analyze     │
+└─────────────┘        └──────────┬────────────────┘
+                                   │ subprocess
+                          ┌────────▼────────┐
+                          │  C++ Core Lib   │
+                          │  risk_engine    │
+                          │  quant_math     │
+                          │  backtester     │
+                          └─────────────────┘
+```
+
+---
+
+## Features
+
+### 1. User Authentication
+- Secure JWT-based login / registration
+- Password hashing with bcrypt
+- `authMiddleware.js` protects all private routes
+
+### 2. Finance Academy (3-tab Learning Centre)
+- **Courses tab** — 8 structured modules (Market Fundamentals → Risk Management) with interactive multi-choice quizzes, progress bars, and graded results
+- **Books & Library tab** — 22 hand-curated finance books and novels (The Intelligent Investor, Flash Boys, The Big Short, The Psychology of Money, …) with cover art, genre tags, page count, and expandable summaries. Search + genre filter
+- **Flashcards tab** — 5 flip-card decks (Market Basics · Technical Analysis · Valuation Ratios · Risk & Portfolio · Crypto & DeFi) totalling 52 cards, with dot-navigation, seen-progress tracker, and deck reset
+
+### 3. Stock Prediction Playground
+- Paper-trading arena — predict directional movement (UP / DOWN) without real money
+- `XGBoost` + `LSTM` hybrid model trained on FAANG + NIFTY-50 historical data
+- AI vs. user prediction comparison with Gemini-generated explanations
+- C++ backtesting engine for fast historical strategy simulation
+
+### 4. Financial News Intelligence
+- Live RSS + NewsAPI feed with automatic ML-driven sentiment analysis
+- **FinBERT** (HuggingFace) for financial tone; VADER as fallback
+- Sentiment heatmaps and ticker-correlation timelines
+- 30-minute MongoDB caching layer to reduce API calls
+
+### 5. Portfolio Analyser
+- Add holdings by ticker (alias normalisation: AMAZON→AMZN, APPLE→AAPL …)
+- Recharts pie (allocation) + line (performance) + bar (risk) charts
+- C++ `risk_engine` computes Sharpe ratio, VaR, and portfolio Beta in real-time
+- Monte Carlo simulation via `quant_math` for forward stress testing
+
+### 6. AI Financial Advisor (Gemini SSE Streaming)
+- Conversational chatbot powered by **Google Gemini 2.0 Flash** (`google-genai` SDK)
+- Server-Sent Events streaming (`/advisor/chat/stream`) for token-by-token delivery
+- Context-aware responses referencing current news and portfolio state
+
+### 7. Community Hub
+- Real-time community chat via Socket.IO
+- Chat history stored in MongoDB `Message` collection
+- Threaded discussion accessible from the sidebar
+
+---
+
+## Repository Structure
+
+```
+FinX/
+├── client/               # React 18 + Vite frontend
+│   └── src/
+│       ├── pages/        # Academy, Dashboard, Portfolio, Advisor, …
+│       ├── components/   # Sidebar, DashboardLayout
+│       ├── context/      # AuthContext (JWT)
+│       └── utils/        # api.js (axios), socket.js
+├── server/               # Node.js / Express backend
+│   ├── routes/           # auth, portfolio, news, prediction, advisor
+│   ├── models/           # Mongoose schemas
+│   ├── socket/           # chatHandler.js (Socket.IO)
+│   ├── services/         # coreEngine.js (C++ bridge)
+│   └── config/db.js      # Resilient MongoDB connection (auto-retry)
+├── ml-service/           # Python FastAPI microservice
+│   ├── routers/          # prediction, advisor, news, explanation, portfolio_ai
+│   ├── models/           # XGBoost + LSTM stock model
+│   └── main.py           # FastAPI app entry, loads .env
+├── core-engine/          # C++ risk & quant engine
+│   ├── src/              # backtester.cpp, quant_math.cpp, risk_engine.cpp
+│   └── include/          # header files
+└── docs/
+    └── postman_collection.json
+```
+
+---
+
+## Getting Started
+
+### Prerequisites
+
+| Tool | Version |
+|---|---|
+| Node.js | ≥ 18 |
+| MongoDB | 6+ (local) or Atlas |
+| Python | ≥ 3.10 |
+| `uv` (Python pkg mgr) | latest (`pip install uv`) |
+| CMake + C++17 compiler | GCC / MSVC / Clang |
+
+---
+
+### 1. Clone
+
+```bash
+git clone https://github.com/your-org/finx.git
+cd finx
+```
+
+---
+
+### 2. Environment Variables
+
+#### `server/.env`
+```env
+PORT=5000
+MONGO_URI=mongodb://127.0.0.1:27017/finx
+JWT_SECRET=your_jwt_secret_here
+JWT_EXPIRES_IN=7d
+ML_SERVICE_URL=http://localhost:8000
+NEWS_API_KEY=your_newsapi_org_key
+```
+
+#### `ml-service/.env`
+```env
+GEMINI_API_KEY=your_google_ai_studio_key
+NEWS_API_KEY=your_newsapi_org_key
+```
+
+---
+
+### 3. MongoDB (Local)
+
+MongoDB can OOM-crash on machines with low RAM. Always start with a bounded cache:
+
+```powershell
+# Windows — start with 256 MB WiredTiger cache
+Start-Process "C:\Program Files\MongoDB\Server\8.2\bin\mongod.exe" `
+  -ArgumentList "--dbpath C:\Users\$env:USERNAME\mongodb-data --logpath C:\Users\$env:USERNAME\mongodb-log\mongod.log --logappend --wiredTigerCacheSizeGB 0.25" `
+  -WindowStyle Hidden
+```
+
+To make this permanent, edit `C:\Program Files\MongoDB\Server\8.2\bin\mongod.cfg`:
+```yaml
+storage:
+  wiredTiger:
+    engineConfig:
+      cacheSizeGB: 0.25
+```
+
+---
+
+### 4. Backend
+
+```bash
+cd server
+npm install
+npm run dev          # nodemon — auto-restarts on file change
+```
+
+Server exposes `http://localhost:5000`.  
+On MongoDB disconnect the server **retries** automatically (no crash / EADDRINUSE loop).
+
+> **One-command start:** `npm run dev` inside `server/` also auto-spawns the ML service on `:8000` — no separate terminal needed.
+
+---
+
+### 5. Frontend
+
+```bash
+cd client
+npm install
+npm run dev          # Vite HMR at http://localhost:5173
+```
+
+---
+
+### 6. ML Microservice
+
+The project uses `uv` for fast, reproducible Python package management.
+
+> **Auto-spawned:** `npm run dev` inside `server/` boots the ML service automatically. Only run this manually if you are working on the ML service in isolation.
+
+```bash
+cd ml-service
+
+# Create venv and install deps (first time only)
+uv venv .venv
+uv pip install -r requirements.txt --python .venv/Scripts/python.exe
+
+# Optional: install FinBERT (large download ~500 MB)
+uv pip install transformers torch --python .venv/Scripts/python.exe
+
+# Start FastAPI manually (optional — auto-started by Node server)
+.venv/Scripts/python.exe -m uvicorn main:app --reload --port 8000
+```
+
+> `transformers` is imported lazily — the service starts even without it, with VADER as fallback sentiment engine.
+
+---
+
+### 7. C++ Core Engine
+
+```bash
+cd core-engine
+mkdir build && cd build
+cmake ..
+cmake --build . --config Release
+```
+
+The compiled module is loaded by `server/services/coreEngine.js` via Node.js N-API.
+
+---
+
+## MongoDB Schemas
+
+### User
+```js
+{ name, email, passwordHash, learningProgress: [Object], predictionHistory: [ObjectId] }
+```
+
+### Portfolio
+```js
+{ userId, holdings: [{ ticker, quantity, avgBuyPrice }], riskScore, lastAnalyzed }
+```
+
+### Prediction
+```js
+{ userId, ticker, userPrediction, aiPrediction, actualOutcome, explanation, timestamp }
+```
+
+### NewsCache
+```js
+{ query, articles: [Object], fetchedAt, expiresAt }
+```
+
+---
+
+## REST API Reference
+
+| Method | Route | Description |
+|---|---|---|
+| POST | `/api/auth/register` | Register user |
+| POST | `/api/auth/login` | Login → JWT |
+| GET | `/api/portfolio/holdings` | Get user portfolio |
+| POST | `/api/portfolio/analyze` | C++ risk analysis |
+| GET | `/api/news/live?q=<query>` | FinBERT-scored live news |
+| POST | `/api/prediction/submit` | Submit user prediction |
+| GET | `/api/prediction/ai/:ticker` | XGBoost+LSTM forecast |
+| POST | `/api/advisor/chat` | Gemini chat (blocking) |
+| GET | `/api/advisor/chat/stream` | Gemini SSE stream |
+
+> Full Postman collection: `docs/postman_collection.json`
+
+---
+
+## C++ Core Engine Modules
+
+| Module | Responsibility |
+|---|---|
+| `risk_engine.cpp` | Portfolio VaR, Sharpe Ratio, Beta, correlation matrix |
+| `quant_math.cpp` | Statistical functions, Monte Carlo simulation |
+| `backtester.cpp` | Historical strategy backtesting with P&L reporting |
+
+---
+
+## Known Setup Notes
+
+- **GEMINI**: Uses the new `google-genai` SDK (v1.65+). The old `google-generativeai` package is deprecated — do not install it.
+- **Transformers / FinBERT**: Not bundled in `requirements.txt` due to large size. Install separately if needed; news sentiment falls back to VADER automatically.
+- **MongoDB cache**: Always start with `--wiredTigerCacheSizeGB 0.25` on machines with < 8 GB RAM to prevent OOM crashes.
+- **Server resilience**: `server/config/db.js` retries MongoDB connection every 5 s instead of crashing. `server/index.js` exits with a clear error on `EADDRINUSE` (no longer retries — kill the blocking PID manually).
+- **ML auto-spawn**: `npm run dev` inside `server/` automatically boots the Python FastAPI service on `:8000` as a managed child process — no separate terminal required. It restarts up to 5× on crash and shuts down cleanly with the Node process.
+
+---
+
+## Contributing
+
+1. Fork the repository
+2. Create your feature branch: `git checkout -b feature/your-feature`
+3. Commit with clear messages: `git commit -m "feat: add portfolio risk engine"`
+4. Push and open a Pull Request
+
 | **Backend** | Node.js, Express.js |
 | **Database** | MongoDB (Mongoose ODM) |
 | **ML / AI Engine** | Python (FastAPI microservice) |
@@ -120,8 +433,8 @@ Existing platforms separate learning, trading tools, and advisory systems.
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/your-org/gift.git
-cd gift
+git clone https://github.com/your-org/finx.git
+cd finx
 ```
 
 ---
@@ -132,7 +445,7 @@ Copy `.env.example` to `.env` and fill in the values:
 
 ```env
 # MongoDB
-MONGO_URI=mongodb+srv://<user>:<password>@cluster.mongodb.net/gift
+MONGO_URI=mongodb+srv://<user>:<password>@cluster.mongodb.net/finx
 
 # JWT
 JWT_SECRET=your_jwt_secret
@@ -177,11 +490,14 @@ npm run dev
 
 ```bash
 cd ml-service
-pip install -r requirements.txt
-# 1. Install N
 
+# Create venv and install all deps (including google-genai for Gemini AI)
+uv venv .venv
+uv pip install -r requirements.txt --python .venv/Scripts/python.exe
 
-
+# ML service is automatically started by the Node server —
+# only run this manually for isolated ML development:
+.venv/Scripts/python.exe -m uvicorn main:app --reload --port 8000
 ```
 
 ---

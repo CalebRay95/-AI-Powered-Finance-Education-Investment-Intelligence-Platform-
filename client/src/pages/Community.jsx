@@ -209,7 +209,7 @@ export default function Community() {
       <header className="p-6 border-b border-gray-800 bg-gray-900 flex items-center justify-between shrink-0">
         <div>
           <h1 className="text-2xl font-bold">
-            GIFT <span className="text-emerald-400">Community</span>
+            FinX <span className="text-emerald-400">Community</span>
           </h1>
           <p className="text-sm text-gray-400 mt-1">
             Real-time discussions and market insights.

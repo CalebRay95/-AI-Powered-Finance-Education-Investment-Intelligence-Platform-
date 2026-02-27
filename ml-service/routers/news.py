@@ -28,6 +28,7 @@ router = APIRouter()
 _analyzer = SentimentIntensityAnalyzer()
 _finbert_pipeline: Any = None
 _finbert_lock = threading.Lock()
+_finbert_skip = False          # set True when warm-up times out / errors
 
 # Google News RSS — no API key needed
 GNEWS_RSS = "https://news.google.com/rss/search"
@@ -96,6 +97,8 @@ def _finbert_score(text: str) -> tuple[str, float]:
 def _safe_finbert_score(text: str) -> tuple[str, float]:
     """Wrapper around _finbert_score that catches all errors and returns a
     neutral fallback, so a FinBERT failure never aborts the /news/live response."""
+    if _finbert_skip:
+        return "NEUTRAL", 0.0
     try:
         return _finbert_score(text)
     except Exception:
@@ -231,9 +234,15 @@ async def live_news(
         interim.append((art, headline, sentiment, score, related_ticker))
 
     # ── Run FinBERT inference + price impact fetches in parallel ──────────────
-    # Warm up FinBERT once (single-flight via _finbert_lock) before spawning
-    # per-article threads so no two workers race to load the model.
-    await asyncio.to_thread(_get_finbert)
+    # Try to warm up FinBERT once — but never let it block the response.
+    # If transformers is not installed or model load times out the route
+    # continues with VADER-only scores (finbert_label = "NEUTRAL", score = 0).
+    global _finbert_skip
+    if not _finbert_skip:
+        try:
+            await asyncio.wait_for(asyncio.to_thread(_get_finbert), timeout=10.0)
+        except Exception:
+            _finbert_skip = True  # don't retry per-article — skip all FinBERT calls
 
     finbert_coros = [
         asyncio.to_thread(

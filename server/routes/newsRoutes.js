@@ -35,8 +35,13 @@ router.get('/live', protect, async (req, res) => {
   // 3. Fetch from ML service (Node 18+ built-in fetch)
   let mlResponse;
   try {
-    mlResponse = await fetch(mlUrl);
+    mlResponse = await fetch(mlUrl, { signal: AbortSignal.timeout(45000) });
   } catch (err) {
+    // ML is offline — serve stale cache rather than a hard error
+    const stale = await NewsCache.findOne({ query });
+    if (stale && stale.articles?.length) {
+      return res.json({ articles: stale.articles, fromCache: true, stale: true });
+    }
     return res.status(502).json({ message: `ML service unreachable: ${err.message}` });
   }
 

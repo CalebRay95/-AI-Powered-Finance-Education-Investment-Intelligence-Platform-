@@ -24,12 +24,18 @@ const ML_BASE = () => process.env.ML_SERVICE_URL || 'http://localhost:8000';
 
 /** Thin wrapper: fetch from ML service, throw on non-2xx. */
 async function mlFetch(path, options = {}) {
-  const res = await fetch(`${ML_BASE()}${path}`, options);
-  if (!res.ok) {
-    const text = await res.text();
-    throw new Error(`ML service ${path} → ${res.status}: ${text.slice(0, 200)}`);
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 30000);
+  try {
+    const res = await fetch(`${ML_BASE()}${path}`, { ...options, signal: controller.signal });
+    if (!res.ok) {
+      const text = await res.text();
+      throw new Error(`ML service ${path} → ${res.status}: ${text.slice(0, 200)}`);
+    }
+    return res.json();
+  } finally {
+    clearTimeout(timer);
   }
-  return res.json();
 }
 
 // ── GET /api/prediction/ai/:ticker ────────────────────────────────────────────
@@ -37,6 +43,19 @@ router.get('/ai/:ticker', protect, async (req, res) => {
   const { ticker } = req.params;
   const data = await mlFetch(`/prediction/predict/${encodeURIComponent(ticker.toUpperCase())}`);
   res.json(data);
+});
+
+// ── GET /api/prediction/chart/:ticker ─────────────────────────────────────────
+// Proxy the chart data request through Node so the frontend never calls ML directly.
+router.get('/chart/:ticker', protect, async (req, res) => {
+  const { ticker } = req.params;
+  try {
+    const data = await mlFetch(`/prediction/chart/${encodeURIComponent(ticker.toUpperCase())}`);
+    res.json(data);
+  } catch (err) {
+    // Return a structured error so the client can show a useful message
+    res.status(502).json({ message: err.message });
+  }
 });
 
 // ── POST /api/prediction/submit ───────────────────────────────────────────────

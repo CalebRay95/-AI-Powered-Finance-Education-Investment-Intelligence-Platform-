@@ -14,9 +14,13 @@ import learningRouter from './routes/learningRoutes.js';
 import communityRouter from './routes/communityRoutes.js';
 import userRouter from './routes/userRoutes.js';
 import { initChat } from './socket/chatHandler.js';
+import { startML } from './services/mlService.js';
 
 // ─── Database ────────────────────────────────────────────────────────────────
 connectDB();
+
+// ─── ML Service (auto-spawned child process) ──────────────────────────────────
+startML();
 
 const app = express();
 
@@ -40,7 +44,7 @@ app.use(
 
 // ─── Health Check ─────────────────────────────────────────────────────────────
 app.get('/health', (_req, res) => {
-  res.json({ status: 'ok', service: 'GIFT API', timestamp: new Date().toISOString() });
+  res.json({ status: 'ok', service: 'FinX API', timestamp: new Date().toISOString() });
 });
 
 // ─── API Routes ───────────────────────────────────────────────────────────────
@@ -81,6 +85,16 @@ const io = new Server(httpServer, {
   },
 });
 initChat(io);
+httpServer.on('error', (err) => {
+  if (err.code === 'EADDRINUSE') {
+    console.error(`\n❌  Port ${PORT} is already in use.\n   Run: netstat -ano | findstr :${PORT}  to find the PID, then taskkill /PID <pid> /F\n`);
+    process.exit(1);
+  } else {
+    throw err;
+  }
+});
 httpServer.listen(PORT, () => {
-  console.log(`GIFT API server running on port ${PORT}`);
+  console.log(`✅  FinX API   → http://localhost:${PORT}`);
+  console.log(`✅  ML Service → http://localhost:${process.env.ML_PORT || 8000}  (spawned)`);
+  console.log(`✅  Frontend   → http://localhost:5173  (run: cd client && npm run dev)`);
 });

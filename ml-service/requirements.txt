@@ -8,7 +8,7 @@ pandas
 numpy
 joblib
 vaderSentiment
-google-generativeai>=0.7,<1.0
+google-genai>=1.0
 xgboost
 tensorflow
 transformers
